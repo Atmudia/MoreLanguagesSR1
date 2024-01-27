@@ -1,0 +1,8 @@
+{
+  "id": "morelanguages",
+  "name": "More Languages",
+  "author": "KomiksPL",
+  "description": "Mod adding a new languages",
+  "version":  "1.8",
+  "load_after": [ "translationapi" ]
+}
