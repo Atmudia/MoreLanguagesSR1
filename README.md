@@ -14,7 +14,7 @@ Immerse yourself further in the world of Slime Rancher with the More Languages M
 1. **Download the Mod:**
     - [More Languages Mod](https://www.nexusmods.com/slimerancher/mods/266)
 
-2. **Install MelonLoader:**
+2. **Install SRML:**
     - Get started by installing [SRML](https://www.nexusmods.com/slimerancher/mods/2).
 
 3. **Install the Mod:**
