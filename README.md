@@ -27,4 +27,4 @@ Embark on a global adventure together—let's make Slime Rancher accessible to p
 
 [Download Mod](https://www.nexusmods.com/slimerancher/mods/266)
 
-For Slime Rancher 2 enthusiasts, an alternative version is available: [Download Mod](https://github.com/KomiksPL/MoreLanguagesSR2), [Source Code](https://github.com/KomiksPL/MoreLanguagesSR2).
+For Slime Rancher 2 enthusiasts, an alternative version is available: [Download Mod](https://www.nexusmods.com/slimerancher2/mods/31), [Source Code](https://github.com/KomiksPL/MoreLanguagesSR2).
