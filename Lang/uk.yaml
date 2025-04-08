@@ -1,0 +1,15 @@
+#=====================================
+# GLOBAL
+#=====================================
+
+# Base game translations
+@import Base/achieve.yaml
+@import Base/actor.yaml
+@import Base/exchange.yaml
+@import Base/keys.yaml
+@import Base/mail.yaml
+@import Base/pedia.yaml
+@import Base/range.yaml
+@import Base/tutorial.yaml
+@import Base/ui.yaml
+@import Base/global.yaml

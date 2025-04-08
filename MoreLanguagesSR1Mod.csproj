@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
-            Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <Import Project="packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props" Condition="Exists('packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -9,9 +9,10 @@
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>MoreLanguages</RootNamespace>
-        <AssemblyName>MoreLanguagesSR1Mod</AssemblyName>
-        <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+        <AssemblyName>MoreLanguages</AssemblyName>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,34 +33,38 @@
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
+    <PropertyGroup>
+      <PostBuildEvent>cp "/HDD/Modding/SlimeRancher/SR1/MoreLanguagesSR1Mod/bin/Debug/MoreLanguages.dll" "/home/komik/.local/share/Steam/steamapps/common/Slime Rancher/SRML/Mods/"</PostBuildEvent>
+    </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher\SRML\Libs\0Harmony.dll</HintPath>
+      <HintPath>/home/komik/.local/share/Steam/steamapps/common/Slime Rancher\SRML\Libs\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\Assembly-CSharp-Publicized.dll</HintPath>
+      <HintPath>..\..\..\..\..\home\komik\.local\share\Steam\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="SRML">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\SRML.dll</HintPath>
+      <HintPath>/home/komik/.local/share/Steam/steamapps/common/Slime Rancher\SlimeRancher_Data\Managed\SRML.dll</HintPath>
     </Reference>
     <Reference Include="System">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\System.dll</HintPath>
+      <HintPath>/home/komik/.local/share/Steam/steamapps/common/Slime Rancher\SlimeRancher_Data\Managed\System.dll</HintPath>
     </Reference>
     <Reference Include="System.Core">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\System.Core.dll</HintPath>
+      <HintPath>/home/komik/.local/share/Steam/steamapps/common/Slime Rancher\SlimeRancher_Data\Managed\System.Core.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>/home/komik/.local/share/Steam/steamapps/common/Slime Rancher\SlimeRancher_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>/home/komik/.local/share/Steam/steamapps/common/Slime Rancher\SlimeRancher_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>/home/komik/.local/share/Steam/steamapps/common/Slime Rancher\SlimeRancher_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Slime Rancher\SlimeRancher_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>/home/komik/.local/share/Steam/steamapps/common/Slime Rancher\SlimeRancher_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
+      <Publicize Include="Assembly-CSharp" IncludeCompilerGeneratedMembers="false" />
   </ItemGroup>
     <ItemGroup>
         <Compile Include="CustomLangSupport.cs" />
@@ -69,16 +74,75 @@
         <Compile Include="Patches\Patch_FabricateGadgetUI.cs" />
         <Compile Include="Patches\Patch_ResourceBundle.cs" />
         <Compile Include="Patches\Patch_XlateText.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="modinfo.json" />
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />
+      <EmbeddedResource Include="Lang\cs.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\achieve.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\actor.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\build.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\exchange.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\global.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\keys.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\mail.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\pedia.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\range.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\tutorial.yaml" />
+      <EmbeddedResource Include="Lang\cs\Base\ui.yaml" />
+      <EmbeddedResource Include="Lang\pl.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\achieve.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\actor.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\build.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\exchange.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\global.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\keys.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\mail.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\pedia.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\range.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\tutorial.yaml" />
+      <EmbeddedResource Include="Lang\pl\Base\ui.yaml" />
+      <EmbeddedResource Include="Lang\tr.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\achieve.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\actor.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\build.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\exchange.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\global.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\keys.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\mail.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\pedia.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\range.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\tutorial.yaml" />
+      <EmbeddedResource Include="Lang\tr\Base\ui.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\achieve.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\actor.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\build.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\exchange.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\global.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\keys.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\mail.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\pedia.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\range.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\tutorial.yaml" />
+      <EmbeddedResource Include="Lang\uk\Base\ui.yaml" />
+      <EmbeddedResource Include="Lang\uk.yaml" />
       <Content Include="README.md" />
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <ItemGroup>
+      <None Include="packages.config" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+      <PropertyGroup>
+        <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+      </PropertyGroup>
+      <Error Condition="!Exists('packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.props'))" />
+      <Error Condition="!Exists('packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets'))" />
+    </Target>
+    <Import Project="packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets" Condition="Exists('packages\Krafs.Publicizer.2.3.0\build\Krafs.Publicizer.targets')" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">

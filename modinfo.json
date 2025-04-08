@@ -1,8 +1,9 @@
 {
   "id": "morelanguages",
   "name": "More Languages",
-  "author": "KomiksPL",
+  "author": "Atmudia",
   "description": "Mod adding a new languages",
-  "version":  "1.8",
-  "load_after": [ "translationapi" ]
+  "version":  "1.9",
+  "load_after": [ "translationapi" ],
+  "download_link": "https://www.nexusmods.com/slimerancher/mods/266"
 }

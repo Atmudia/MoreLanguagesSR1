@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using SRML.Console;
@@ -16,63 +15,67 @@ namespace MoreLanguages
 
             if (currLang != cultureLang)
             {
-                string langFilePath = GetLangFilePath(cultureLang);
+                string langResourceName = GetLangResourceName(cultureLang);
                 try
-                {   
-                    ProcessLangFile(langFilePath);
+                {
+                    if (!LANGUAGE_TO_ASSEMBLY_MAP.TryGetValue(cultureLang, out Assembly value))
+                        return;
+                    ProcessLangFile(langResourceName, value);
                     currLang = cultureLang;
                     
                 }
                 catch (Exception ex)
                 {
-                    EntryPoint.Instance.ConsoleInstance.LogError(ex.Source);
+                    EntryPoint.Instance.ConsoleInstance.LogError(ex);
                     throw;
                 }
             }
         }
 
-        private static string GetLangFilePath(MessageDirector.Lang lang)
+        private static string GetLangResourceName(MessageDirector.Lang lang)
         {
-            Assembly execAssembly = EntryPoint.ExecAssembly;
             string langCode = lang.ToString().ToLower();
-            string codeBase = execAssembly.CodeBase;
-            UriBuilder uriBuilder = new UriBuilder(codeBase);
-            string assemblyPath = Uri.UnescapeDataString(uriBuilder.Path);
-            return Path.Combine(Path.GetDirectoryName(assemblyPath), "Lang\\" + langCode + ".yaml");
+            return $"MoreLanguages.Lang.{langCode}.yaml"; // Adjust this for your actual namespace and resource structure
         }
 
-        private static void ProcessLangFile(string filePath)
+        private static void ProcessLangFile(string resourceName, Assembly assembly)
         {
-            if (!File.Exists(filePath))
-                return;
-            StreamReader streamReader = new StreamReader(filePath);
-            string[] lines = streamReader.ReadToEnd().Split('\n');
-            foreach (string line in lines)
-            {
-                if (line.StartsWith("@import "))
-                {
-                    string importedFilePath = line.Replace("@import ", "").Trim().Replace("/", "\\");
-                    FileInfo fileInfo = new FileInfo(Path.Combine(Path.GetDirectoryName(filePath), SRSingleton<GameContext>.Instance.MessageDirector.GetCurrentLanguageCode().ToLowerInvariant() + "\\" + importedFilePath));
-                    if (fileInfo.Exists)
-                    {
-                        ProcessLangFile(fileInfo.FullName);
-                    }
-                }
-                else if (!string.IsNullOrWhiteSpace(line) && line.Contains(":"))
-                {
-    
-                    string bundle = line.Substring(0, line.IndexOf(':'));
-					
-                    string key = line.Substring(0, line.IndexOf(':', bundle.Length+1))
-                        .Replace(string.Format("{0}:", bundle), string.Empty);
-					
-                    string value = line.Replace(string.Format("{0}:{1}:", bundle, key), string.Empty);
+            // Assembly assembly = Assembly.GetExecutingAssembly();
 
-                    AddTranslation(bundle.Trim('"'), key.Trim('"'), value.TrimStart()
-                        .TrimStart('"')
-                        .TrimEnd('"')
-                        .Replace("\\n", "\n")
-                        .Replace("\\\"", "\""));
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    // EntryPoint.Instance.ConsoleInstance.LogError($"Resource {resourceName} not found.");
+                    return;
+                }
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string[] lines = reader.ReadToEnd().Split('\n');
+                    foreach (string line in lines)
+                    {
+                        if (line.StartsWith("@import "))
+                        {
+                            string importedFileName = line.Replace("@import ", "").Trim().Replace("/", ".");
+                            string importedResourceName = $"{assembly.GetName().Name}.Lang.{SRSingleton<GameContext>.Instance.MessageDirector.GetCurrentLanguageCode().ToLowerInvariant()}.{importedFileName}";
+                            ProcessLangFile(importedResourceName, assembly);
+                        }
+                        else if (!string.IsNullOrWhiteSpace(line) && line.Contains(":"))
+                        {
+                            string bundle = line.Substring(0, line.IndexOf(':'));
+                            string key = line.Substring(0, line.IndexOf(':', bundle.Length + 1))
+                                .Replace($"{bundle}:", string.Empty);
+
+                            string value = line.Replace($"{bundle}:{key}:", string.Empty)
+                                .TrimStart().Trim('"')
+                                .TrimEnd('"')
+                                .Replace("\\n", "\n")
+                                .Replace("\\\"", "\"");
+
+                            AddTranslation(bundle.Trim('"'), key.Trim('"'), value);
+                        }
+                    }
                 }
             }
         }
@@ -89,7 +92,6 @@ namespace MoreLanguages
 
         internal static void ResetTranslations(MessageDirector dir)
         {                
-
             if (currLang == dir.GetCultureLang()) return;
 
             foreach (string bundle in TRANSLATIONS.Keys)
@@ -104,93 +106,33 @@ namespace MoreLanguages
 
         internal static readonly Dictionary<MessageDirector.Lang, string> LANGUAGES = new Dictionary<MessageDirector.Lang, string>
         {
-            {
-                MessageDirector.Lang.EN,
-                "English"
-            },
-            {
-                MessageDirector.Lang.DE,
-                "Deutsch"
-            },
-            {
-                MessageDirector.Lang.ES,
-                "Español"
-            },
-            {
-                MessageDirector.Lang.FR,
-                "Français"
-            },
-            {
-                MessageDirector.Lang.RU,
-                "Pyccкий"
-            },
-            {
-                MessageDirector.Lang.ZH,
-                "中文"
-            },
-            {
-                MessageDirector.Lang.JA,
-                "日本語"
-            },
-            {
-                MessageDirector.Lang.SV,
-                "Svenska"
-            },
-            {
-                MessageDirector.Lang.PT,
-                "Português-Brasil"
-            },
-            {
-                MessageDirector.Lang.KO,
-                "한국어"
-            }
+            { MessageDirector.Lang.EN, "English" },
+            { MessageDirector.Lang.DE, "Deutsch" },
+            { MessageDirector.Lang.ES, "Español" },
+            { MessageDirector.Lang.FR, "Français" },
+            { MessageDirector.Lang.RU, "Pyccкий" },
+            { MessageDirector.Lang.ZH, "中文" },
+            { MessageDirector.Lang.JA, "日本語" },
+            { MessageDirector.Lang.SV, "Svenska" },
+            { MessageDirector.Lang.PT, "Português-Brasil" },
+            { MessageDirector.Lang.KO, "한국어" }
         };
+        internal static readonly Dictionary<MessageDirector.Lang, Assembly> LANGUAGE_TO_ASSEMBLY_MAP = new Dictionary<MessageDirector.Lang, Assembly>();
+        
+
         internal static readonly Dictionary<string, Dictionary<string, string>> TRANSLATIONS = new Dictionary<string, Dictionary<string, string>>
         {
-            {
-                "global",
-                new Dictionary<string, string>()
-            },
-            {
-                "actor",
-                new Dictionary<string, string>()
-            },
-            {
-                "pedia",
-                new Dictionary<string, string>()
-            },
-            {
-                "ui",
-                new Dictionary<string, string>()
-            },
-            {
-                "range",
-                new Dictionary<string, string>()
-            },
-            {
-                "build",
-                new Dictionary<string, string>()
-            },
-            {
-                "mail",
-                new Dictionary<string, string>()
-            },
-            {
-                "keys",
-                new Dictionary<string, string>()
-            },
-            {
-                "achieve",
-                new Dictionary<string, string>()
-            },
-            {
-                "exchange",
-                new Dictionary<string, string>()
-            },
-            {
-                "tutorial",
-                new Dictionary<string, string>()
-            }
+            { "global", new Dictionary<string, string>() },
+            { "actor", new Dictionary<string, string>() },
+            { "pedia", new Dictionary<string, string>() },
+            { "ui", new Dictionary<string, string>() },
+            { "range", new Dictionary<string, string>() },
+            { "build", new Dictionary<string, string>() },
+            { "mail", new Dictionary<string, string>() },
+            { "keys", new Dictionary<string, string>() },
+            { "achieve", new Dictionary<string, string>() },
+            { "exchange", new Dictionary<string, string>() },
+            { "tutorial", new Dictionary<string, string>() }
         };
     }
 }
